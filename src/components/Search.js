@@ -16,33 +16,58 @@ export const Search = (props) => {
     currency: true,
   });
 
+  const [displayedProducts, setDisplayedProducts] = useState(props.products)
+
   const onPriceInputChange = (name, value) => {
-    // TODO: implement price change handler
+     setPrice((prevPrice) => ({
+       ...prevPrice,
+       [name]:value
+     }))
+    filterProducts()
   }
 
   const onCheckboxClick = (name, checked) => {
-    // TODO: implement checkbox click handler
+    setColumns((prevColumns) => ({
+      ...prevColumns,
+      [name]:checked
+    }))
   }
 
   const filterProducts = () => {
-    // TODO: implement handler for filtering products by price range
+    const filteredProducts = props.products.filter(product => {
+      const productPrice = product.price
+      if(price.priceFrom === '' && price.priceTo === ''){
+        return true
+      }
+      if(price.priceFrom !== '' && price.priceTo !==''){
+        return productPrice >= price.priceFrom && productPrice <= price.priceTo;
+      }
+      if(price.priceFrom !== ''){
+        return productPrice >= price.priceFrom;
+      }
+      if(price.priceTo !==''){
+        return productPrice <= price.priceTo;
+      }
+      return false
+    })
+    setDisplayedProducts(filteredProducts)
   }
 
-  let displayedProducts = [];
+  //let displayedProducts = [];
   return (
     <div className="Products">
       <FilterForm
-        priceFrom={''}
-        priceTo={''}
-        onPriceInputChange={''} />
+        priceFrom={price.priceFrom}
+        priceTo={price.priceTo}
+        onPriceInputChange={onPriceInputChange} />
 
       <ToggleColumns
-        onCheckboxClick={''}
-        columns={''} />
+        onCheckboxClick={onCheckboxClick}
+        columns={columns} />
 
       <ProductList
         products={displayedProducts}
-        columns={''} />
+        columns={columns} />
     </div>
   );
 }
