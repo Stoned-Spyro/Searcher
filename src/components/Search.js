@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import '../styles/Search.css';
 import { ToggleColumns } from './ToggleColumns';
@@ -18,12 +18,15 @@ export const Search = (props) => {
 
   const [displayedProducts, setDisplayedProducts] = useState(props.products)
 
+  useEffect(()=>{
+    filterProducts()
+  },[price])
+
   const onPriceInputChange = (name, value) => {
-     setPrice((prevPrice) => ({
+    setPrice((prevPrice) => ({
        ...prevPrice,
        [name]:value
      }))
-    filterProducts()
   }
 
   const onCheckboxClick = (name, checked) => {
